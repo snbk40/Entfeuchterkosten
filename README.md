@@ -116,8 +116,9 @@ ready-made dashboard with everything Entfeuchterkosten shows:
 - **Statistik:** bar charts of the costs per day and per month, and of the
   energy per day
 
-It uses only cards built into Home Assistant. Its texts and entity IDs are
-German, which is what Home Assistant uses when it is set to German.
+It uses only cards built into Home Assistant. Its texts are German; its
+entity IDs are the ones the sensors get when the helper is named
+"Entfeuchter", for example `sensor.entfeuchter_cost_today`.
 
 1. Open the file and replace `sensor.entfeuchter_leistung` with the power
    sensor of your dehumidifier, and `sensor.balkonkraftwerk_leistung` with your
