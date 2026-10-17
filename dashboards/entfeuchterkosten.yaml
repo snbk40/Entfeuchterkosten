@@ -51,7 +51,7 @@ views:
             name: Solar
             icon: mdi:solar-power-variant
           - type: history-graph
-            title: Power in the last 24 hours
+            title: Dehumidifier vs. solar (24 h)
             hours_to_show: 24
             entities:
               - entity: sensor.dehumidifier_power
