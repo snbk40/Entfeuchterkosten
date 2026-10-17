@@ -1,0 +1,12 @@
+{
+  "domain": "entfeuchterkosten",
+  "name": "Entfeuchterkosten",
+  "codeowners": ["@snbk40"],
+  "config_flow": true,
+  "documentation": "https://github.com/snbk40/Entfeuchterkosten",
+  "integration_type": "helper",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/snbk40/Entfeuchterkosten/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}
