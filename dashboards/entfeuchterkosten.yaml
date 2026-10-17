@@ -1,19 +1,19 @@
-# Dashboard for Entfeuchterkosten, with German texts.
+# Dashboard for Entfeuchterkosten.
 #
-# Paste it into a new dashboard: Einstellungen > Dashboards > Dashboard
-# hinzufügen > Neues Dashboard von Grund auf, open it, then the pencil >
-# ⋮ > Raw-Konfigurationseditor. See "Dashboard" in the README.
+# Paste it into a new dashboard: Settings > Dashboards > Add dashboard >
+# New dashboard from scratch, open it, then the pencil > ⋮ > Raw
+# configuration editor. See "Dashboard" in the README.
 #
 # Before pasting, replace these entity IDs with your own:
-#   sensor.entfeuchter_leistung      the power sensor of the dehumidifier
-#   sensor.balkonkraftwerk_leistung  the solar power sensor
+#   sensor.dehumidifier_power  the power sensor of the dehumidifier
+#   sensor.solar_power         the solar power sensor
 # If you did not name the helper "Entfeuchter", also replace the prefix
 # "sensor.entfeuchter_" of the other sensors with the name you chose.
 
 title: Entfeuchterkosten
 views:
-  - title: Entfeuchter
-    path: entfeuchter
+  - title: Dehumidifier
+    path: dehumidifier
     icon: mdi:air-humidifier
     type: sections
     max_columns: 3
@@ -21,11 +21,11 @@ views:
       - type: grid
         cards:
           - type: heading
-            heading: Jetzt
+            heading: Now
             icon: mdi:flash
           - type: gauge
             entity: sensor.entfeuchter_chargeable_power
-            name: Kostenpflichtige Leistung
+            name: Chargeable power
             unit: W
             min: 0
             max: 600
@@ -37,72 +37,72 @@ views:
             grid_options:
               columns: full
           - type: tile
-            entity: sensor.entfeuchter_leistung
-            name: Entfeuchter
+            entity: sensor.dehumidifier_power
+            name: Dehumidifier
             icon: mdi:air-humidifier
           - type: tile
-            entity: sensor.balkonkraftwerk_leistung
-            name: Balkonkraftwerk
+            entity: sensor.solar_power
+            name: Solar
             icon: mdi:solar-power-variant
           - type: history-graph
-            title: Leistung in den letzten 24 Stunden
+            title: Power in the last 24 hours
             hours_to_show: 24
             entities:
-              - entity: sensor.entfeuchter_leistung
-                name: Entfeuchter
-              - entity: sensor.balkonkraftwerk_leistung
-                name: Balkonkraftwerk
+              - entity: sensor.dehumidifier_power
+                name: Dehumidifier
+              - entity: sensor.solar_power
+                name: Solar
               - entity: sensor.entfeuchter_chargeable_power
-                name: Kostenpflichtig
+                name: Chargeable
             grid_options:
               columns: full
 
       - type: grid
         cards:
           - type: heading
-            heading: Kosten
+            heading: Costs
             icon: mdi:cash
           - type: tile
             entity: sensor.entfeuchter_cost_today
-            name: Heute
+            name: Today
             icon: mdi:calendar-today
           - type: tile
             entity: sensor.entfeuchter_cost_this_month
-            name: Diesen Monat
+            name: This month
             icon: mdi:calendar-month
           - type: tile
             entity: sensor.entfeuchter_cost_this_year
-            name: Dieses Jahr
+            name: This year
             icon: mdi:calendar
           - type: tile
             entity: sensor.entfeuchter_total_cost
-            name: Gesamt
+            name: Total
             icon: mdi:sigma
           - type: tile
             entity: sensor.entfeuchter_total_energy
-            name: Energie gesamt
+            name: Total energy
             icon: mdi:lightning-bolt
             grid_options:
               columns: full
           - type: history-graph
-            title: Kosten heute im Verlauf
+            title: Cost today over the day
             hours_to_show: 24
             entities:
               - entity: sensor.entfeuchter_cost_today
-                name: Kosten heute
+                name: Cost today
             grid_options:
               columns: full
 
       - type: grid
         cards:
           - type: heading
-            heading: Statistik
+            heading: Statistics
             icon: mdi:chart-bar
           - type: statistics-graph
-            title: Kosten pro Tag
+            title: Costs per day
             entities:
               - entity: sensor.entfeuchter_total_cost
-                name: Kosten
+                name: Costs
             stat_types:
               - change
             period: day
@@ -111,10 +111,10 @@ views:
             grid_options:
               columns: full
           - type: statistics-graph
-            title: Kosten pro Monat
+            title: Costs per month
             entities:
               - entity: sensor.entfeuchter_total_cost
-                name: Kosten
+                name: Costs
             stat_types:
               - change
             period: month
@@ -123,10 +123,10 @@ views:
             grid_options:
               columns: full
           - type: statistics-graph
-            title: Energie pro Tag
+            title: Energy per day
             entities:
               - entity: sensor.entfeuchter_total_energy
-                name: Energie
+                name: Energy
             stat_types:
               - change
             period: day

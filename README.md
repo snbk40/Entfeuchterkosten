@@ -4,8 +4,7 @@ Entfeuchterkosten is a custom Home Assistant integration that calculates the
 electricity costs of a dehumidifier ("Entfeuchter") from its power sensor,
 for example the one of a smart plug, and a fixed electricity price.
 
-If you have solar panels, for example a balcony solar plant
-("Balkonkraftwerk"), their power is offset against the dehumidifier's in real
+If you have solar panels, for example a balcony solar plant, their power is offset against the dehumidifier's in real
 time: solar power is free, so only the part of the dehumidifier's power above
 it costs money.
 
@@ -109,31 +108,30 @@ To show the costs in the Energy dashboard, add the dehumidifier under
 [`dashboards/entfeuchterkosten.yaml`](dashboards/entfeuchterkosten.yaml) is a
 ready-made dashboard with everything Entfeuchterkosten shows:
 
-- **Jetzt:** a gauge of the chargeable power, the power of the dehumidifier
+- **Now:** a gauge of the chargeable power, the power of the dehumidifier
   and of the solar panels, and the three powers over the last 24 hours
-- **Kosten:** the costs of today, this month, this year and in total, the
+- **Costs:** the costs of today, this month, this year and in total, the
   total energy, and today's costs over the day
-- **Statistik:** bar charts of the costs per day and per month, and of the
+- **Statistics:** bar charts of the costs per day and per month, and of the
   energy per day
 
-It uses only cards built into Home Assistant. Its texts are German; its
-entity IDs are the ones the sensors get when the helper is named
+It uses only cards built into Home Assistant. Its entity IDs are the ones the sensors get when the helper is named
 "Entfeuchter", for example `sensor.entfeuchter_cost_today`.
 
-1. Open the file and replace `sensor.entfeuchter_leistung` with the power
-   sensor of your dehumidifier, and `sensor.balkonkraftwerk_leistung` with your
+1. Open the file and replace `sensor.dehumidifier_power` with the power
+   sensor of your dehumidifier, and `sensor.solar_power` with your
    solar power sensor. Without a solar power sensor, delete the cards that use
    it.
 2. If you did not name the helper "Entfeuchter", replace the prefix
    `sensor.entfeuchter_` of the other sensors with the name you chose, in
    lower case. The exact entity IDs are listed on the helper's device page.
-3. Go to **Einstellungen > Dashboards > Dashboard hinzufügen** and choose
-   **Neues Dashboard von Grund auf**. Give it a name, for example
+3. Go to **Settings > Dashboards > Add dashboard** and choose
+   **New dashboard from scratch**. Give it a name, for example
    "Entfeuchterkosten".
 4. Open the new dashboard, click the pencil at the top right, then
-   **⋮ > Raw-Konfigurationseditor**.
+   **⋮ > Raw configuration editor**.
 5. Replace everything in the editor with the contents of the file and click
-   **Speichern**.
+   **Save**.
 
 The bar charts fill up over time: Home Assistant keeps the hourly statistics
 they are drawn from only from the moment the sensors exist.
@@ -149,8 +147,8 @@ they are drawn from only from the moment the sensors exist.
 | `custom_components/entfeuchterkosten/__init__.py` | Sets the integration up and tears it down |
 | `custom_components/entfeuchterkosten/config_flow.py` | The setup dialog and the options dialog |
 | `custom_components/entfeuchterkosten/sensor.py` | The cost, energy and chargeable power sensors |
-| `custom_components/entfeuchterkosten/translations/` | UI texts (English and German) |
-| `dashboards/entfeuchterkosten.yaml` | A ready-made dashboard (German) |
+| `custom_components/entfeuchterkosten/translations/` | UI texts (English) |
+| `dashboards/entfeuchterkosten.yaml` | A ready-made dashboard |
 | `hacs.json` | Name and minimum Home Assistant version for HACS |
 | `tests/test_cost.py` | Tests of the cost meter |
 | `pyproject.toml` | Settings for the code checkers ruff and mypy |
