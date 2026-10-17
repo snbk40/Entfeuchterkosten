@@ -55,7 +55,8 @@ def _price_selector(currency: str) -> selector.NumberSelector:
         selector.NumberSelectorConfig(
             min=0,
             max=MAX_PRICE,
-            step=0.0001,
+            # Home Assistant allows no step below 0.001; prices often have 4 decimals.
+            step="any",
             unit_of_measurement=f"{currency}/kWh",
             mode=selector.NumberSelectorMode.BOX,
         )
