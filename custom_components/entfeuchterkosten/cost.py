@@ -67,25 +67,28 @@ def _hours(start: datetime, end: datetime) -> float:
 
 @dataclass
 class PeriodCost:
-    """The costs since the start of the current day, month or year."""
+    """The costs and savings since the start of the current day, month or year."""
 
     start: datetime
     cost: float = 0.0
+    savings: float = 0.0
 
 
 @dataclass
 class CostMeter:
-    """Adds up the energy and the costs of one dehumidifier.
+    """Adds up the energy, the costs and the savings of one dehumidifier.
 
     The energy is everything the dehumidifier uses; the costs count only its
-    chargeable power, the part not covered by solar power. All times must carry the local time zone, which decides where a day,
-    month or year begins.
+    chargeable power, the part not covered by solar power, and the savings
+    the part that is covered. All times must carry the local time zone, which
+    decides where a day, month or year begins.
     """
 
     price: float  # per kWh
     now: datetime
     total_kwh: float = 0.0
     total_cost: float = 0.0
+    total_savings: float = 0.0
     periods: dict[Period, PeriodCost] = field(default_factory=dict)
     _watts: float | None = field(default=None, init=False)
     _solar_watts: float = field(default=0.0, init=False)
@@ -151,19 +154,31 @@ class CostMeter:
             self._since = now
         self._roll(now)
 
-    def restore_period(self, period: Period, cost: float, start: datetime) -> None:
-        """Add a cost kept from before a restart, if its period is still running."""
+    def restore_period(
+        self, period: Period, value: float, start: datetime, *, savings: bool = False
+    ) -> None:
+        """Add a cost or saving kept from before a restart.
+
+        It is added only if its period is still running.
+        """
         current = self.periods[period]
-        if start == current.start:
-            current.cost += cost
+        if start != current.start:
+            return
+        if savings:
+            current.savings += value
+        else:
+            current.cost += value
 
     def _add(self, start: datetime, kwh: float, chargeable_kwh: float) -> None:
         cost = chargeable_kwh * self.price
+        savings = (kwh - chargeable_kwh) * self.price
         self.total_kwh += kwh
         self.total_cost += cost
+        self.total_savings += savings
         self._roll(start)
         for current in self.periods.values():
             current.cost += cost
+            current.savings += savings
 
     def _roll(self, when: datetime) -> None:
         """Start a period again at zero once a new day, month or year begins."""

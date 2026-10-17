@@ -59,6 +59,18 @@
       "cost_total": {
         "name": "Total cost"
       },
+      "savings_today": {
+        "name": "Savings today"
+      },
+      "savings_month": {
+        "name": "Savings this month"
+      },
+      "savings_year": {
+        "name": "Savings this year"
+      },
+      "savings_total": {
+        "name": "Total savings"
+      },
       "energy_total": {
         "name": "Total energy"
       },

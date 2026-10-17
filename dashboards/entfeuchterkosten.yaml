@@ -104,6 +104,40 @@ views:
       - type: grid
         cards:
           - type: heading
+            heading: Savings
+            icon: mdi:piggy-bank
+          - type: tile
+            entity: sensor.entfeuchter_savings_today
+            name: Today
+            icon: mdi:calendar-today
+          - type: tile
+            entity: sensor.entfeuchter_savings_this_month
+            name: This month
+            icon: mdi:calendar-month
+          - type: tile
+            entity: sensor.entfeuchter_savings_this_year
+            name: This year
+            icon: mdi:calendar
+          - type: tile
+            entity: sensor.entfeuchter_total_savings
+            name: Total
+            icon: mdi:sigma
+          - type: statistics-graph
+            title: Savings per day
+            entities:
+              - entity: sensor.entfeuchter_total_savings
+                name: Savings
+            stat_types:
+              - change
+            period: day
+            days_to_show: 30
+            chart_type: bar
+            grid_options:
+              columns: full
+
+      - type: grid
+        cards:
+          - type: heading
             heading: Statistics
             icon: mdi:chart-bar
           - type: statistics-graph

@@ -20,6 +20,10 @@ For each dehumidifier you set up:
 | Cost this month | your currency | on the first of every month |
 | Cost this year | your currency | on 1 January |
 | Total cost | your currency | never |
+| Savings today | your currency | every midnight |
+| Savings this month | your currency | on the first of every month |
+| Savings this year | your currency | on 1 January |
+| Total savings | your currency | never |
 | Total energy | kWh | never |
 | Chargeable power | W | – (current value) |
 | Solar savings | W | – (current value) |
@@ -92,6 +96,10 @@ the dehumidifier's power:
   up to the dehumidifier's power.
 - The costs count only the chargeable power. While the solar panels generate
   more than the dehumidifier uses, it costs nothing.
+- The **savings** count the solar savings at the same price: what the energy
+  the solar panels covered would have cost from the grid. Costs and savings
+  together are what the dehumidifier would cost without solar panels. Like
+  the costs, the daily, monthly and yearly savings start again at zero.
 - **Total energy** still counts everything the dehumidifier uses, solar or not.
 - While the solar power sensor is *unavailable* or *unknown*, as many
   inverters are at night, the solar power counts as zero: the dehumidifier's
@@ -117,6 +125,8 @@ ready-made dashboard with everything Entfeuchterkosten shows:
   hours
 - **Costs:** the costs of today, this month, this year and in total, the
   total energy, and today's costs over the day
+- **Savings:** the savings of today, this month, this year and in total,
+  and a bar chart of the savings per day
 - **Statistics:** bar charts of the costs per day and per month, and of the
   energy per day
 

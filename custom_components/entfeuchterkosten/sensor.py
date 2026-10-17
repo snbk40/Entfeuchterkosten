@@ -35,6 +35,7 @@ class EntfeuchterkostenSensorDescription(SensorEntityDescription):
     # Adds a value kept from before a restart; the periods use their last reset.
     restore_fn: Callable[[CostMeter, float], None] | None = None
     period: Period | None = None  # the total starts again at zero after it
+    savings: bool = False  # a saving through solar power, not a cost
 
 
 def _cost(key: str, **kwargs: Any) -> dict[str, Any]:
@@ -50,6 +51,10 @@ def _cost(key: str, **kwargs: Any) -> dict[str, Any]:
 
 def _add_total_cost(meter: CostMeter, value: float) -> None:
     meter.total_cost += value
+
+
+def _add_total_savings(meter: CostMeter, value: float) -> None:
+    meter.total_savings += value
 
 
 def _add_total_kwh(meter: CostMeter, value: float) -> None:
@@ -73,6 +78,23 @@ SENSORS: tuple[EntfeuchterkostenSensorDescription, ...] = (
         **_cost("cost_total"),
         value_fn=lambda meter: meter.total_cost,
         restore_fn=_add_total_cost,
+    ),
+    EntfeuchterkostenSensorDescription(
+        **_cost("savings_today", period=Period.DAY, savings=True),
+        value_fn=lambda meter: meter.periods[Period.DAY].savings,
+    ),
+    EntfeuchterkostenSensorDescription(
+        **_cost("savings_month", period=Period.MONTH, savings=True),
+        value_fn=lambda meter: meter.periods[Period.MONTH].savings,
+    ),
+    EntfeuchterkostenSensorDescription(
+        **_cost("savings_year", period=Period.YEAR, savings=True),
+        value_fn=lambda meter: meter.periods[Period.YEAR].savings,
+    ),
+    EntfeuchterkostenSensorDescription(
+        **_cost("savings_total", savings=True),
+        value_fn=lambda meter: meter.total_savings,
+        restore_fn=_add_total_savings,
     ),
     EntfeuchterkostenSensorDescription(
         key="energy_total",
@@ -202,7 +224,10 @@ class EntfeuchterkostenSensor(RestoreSensor):
         )
         if last_reset is not None:
             self._tracker.meter.restore_period(
-                self.entity_description.period, value, last_reset
+                self.entity_description.period,
+                value,
+                last_reset,
+                savings=self.entity_description.savings,
             )
 
     @property

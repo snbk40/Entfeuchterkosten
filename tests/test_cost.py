@@ -172,6 +172,45 @@ class CostMeter(unittest.TestCase):
         meter.set_solar_power(None, at(2026, 10, 17, 10))  # inverter offline
         self.assertEqual(meter.saved_watts, 0)
 
+    def test_savings_are_what_solar_covered(self):
+        meter = cost.CostMeter(price=0.5, now=at(2026, 10, 17, 10))
+        meter.set_power(400, at(2026, 10, 17, 10))
+        meter.set_solar_power(300, at(2026, 10, 17, 10))
+        meter.advance(at(2026, 10, 17, 12))
+        self.assertAlmostEqual(meter.total_savings, 0.6 * 0.5)
+        self.assertAlmostEqual(meter.total_cost, 0.2 * 0.5)
+        # Costs and savings together: the price of all the energy used
+        self.assertAlmostEqual(
+            meter.total_cost + meter.total_savings, meter.total_kwh * 0.5
+        )
+        for period in Period:
+            self.assertAlmostEqual(meter.periods[period].savings, 0.3)
+
+    def test_no_savings_beyond_what_is_used(self):
+        meter = cost.CostMeter(price=1.0, now=at(2026, 10, 17, 10))
+        meter.set_power(400, at(2026, 10, 17, 10))
+        meter.set_solar_power(1000, at(2026, 10, 17, 10))
+        meter.advance(at(2026, 10, 17, 11))
+        self.assertAlmostEqual(meter.total_savings, 0.4)
+
+    def test_savings_start_again_at_midnight(self):
+        meter = cost.CostMeter(price=1.0, now=at(2026, 10, 17, 23))
+        meter.set_power(1000, at(2026, 10, 17, 23))
+        meter.set_solar_power(1000, at(2026, 10, 17, 23))
+        meter.advance(at(2026, 10, 18, 1))
+        self.assertAlmostEqual(meter.total_savings, 2.0)
+        self.assertAlmostEqual(meter.periods[Period.DAY].savings, 1.0)
+        self.assertAlmostEqual(meter.periods[Period.MONTH].savings, 2.0)
+
+    def test_restore_savings_separately_from_costs(self):
+        meter = cost.CostMeter(price=1.0, now=at(2026, 10, 17, 10))
+        meter.restore_period(Period.DAY, 1.5, at(2026, 10, 17))
+        meter.restore_period(Period.DAY, 0.7, at(2026, 10, 17), savings=True)
+        meter.restore_period(Period.MONTH, 3.0, at(2026, 9, 1), savings=True)
+        self.assertEqual(meter.periods[Period.DAY].cost, 1.5)
+        self.assertEqual(meter.periods[Period.DAY].savings, 0.7)
+        self.assertEqual(meter.periods[Period.MONTH].savings, 0)  # last month
+
     def test_restore_period_only_while_it_runs(self):
         meter = cost.CostMeter(price=1.0, now=at(2026, 10, 17, 10))
         meter.restore_period(Period.DAY, 1.5, at(2026, 10, 17))
