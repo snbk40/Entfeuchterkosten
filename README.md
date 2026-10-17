@@ -104,6 +104,39 @@ the dehumidifier's power:
 To show the costs in the Energy dashboard, add the dehumidifier under
 **Settings > Dashboards > Energy > Individual devices** with **Total energy**.
 
+## Dashboard
+
+[`dashboards/entfeuchterkosten.yaml`](dashboards/entfeuchterkosten.yaml) is a
+ready-made dashboard with everything Entfeuchterkosten shows:
+
+- **Jetzt:** a gauge of the chargeable power, the power of the dehumidifier
+  and of the solar panels, and the three powers over the last 24 hours
+- **Kosten:** the costs of today, this month, this year and in total, the
+  total energy, and today's costs over the day
+- **Statistik:** bar charts of the costs per day and per month, and of the
+  energy per day
+
+It uses only cards built into Home Assistant. Its texts and entity IDs are
+German, which is what Home Assistant uses when it is set to German.
+
+1. Open the file and replace `sensor.entfeuchter_leistung` with the power
+   sensor of your dehumidifier, and `sensor.balkonkraftwerk_leistung` with your
+   solar power sensor. Without a solar power sensor, delete the cards that use
+   it.
+2. If you did not name the helper "Entfeuchter", replace the prefix
+   `sensor.entfeuchter_` of the other sensors with the name you chose, in
+   lower case. The exact entity IDs are listed on the helper's device page.
+3. Go to **Einstellungen > Dashboards > Dashboard hinzufügen** and choose
+   **Neues Dashboard von Grund auf**. Give it a name, for example
+   "Entfeuchterkosten".
+4. Open the new dashboard, click the pencil at the top right, then
+   **⋮ > Raw-Konfigurationseditor**.
+5. Replace everything in the editor with the contents of the file and click
+   **Speichern**.
+
+The bar charts fill up over time: Home Assistant keeps the hourly statistics
+they are drawn from only from the moment the sensors exist.
+
 ## How it is built
 
 | File | Purpose |
@@ -116,6 +149,7 @@ To show the costs in the Energy dashboard, add the dehumidifier under
 | `custom_components/entfeuchterkosten/config_flow.py` | The setup dialog and the options dialog |
 | `custom_components/entfeuchterkosten/sensor.py` | The cost, energy and chargeable power sensors |
 | `custom_components/entfeuchterkosten/translations/` | UI texts (English and German) |
+| `dashboards/entfeuchterkosten.yaml` | A ready-made dashboard (German) |
 | `hacs.json` | Name and minimum Home Assistant version for HACS |
 | `tests/test_cost.py` | Tests of the cost meter |
 | `pyproject.toml` | Settings for the code checkers ruff and mypy |

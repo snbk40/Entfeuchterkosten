@@ -1,0 +1,136 @@
+# Dashboard for Entfeuchterkosten, for Home Assistant set to German.
+#
+# Paste it into a new dashboard: Einstellungen > Dashboards > Dashboard
+# hinzufügen > Neues Dashboard von Grund auf, open it, then the pencil >
+# ⋮ > Raw-Konfigurationseditor. See "Dashboard" in the README.
+#
+# Before pasting, replace these entity IDs with your own:
+#   sensor.entfeuchter_leistung      the power sensor of the dehumidifier
+#   sensor.balkonkraftwerk_leistung  the solar power sensor
+# If you did not name the helper "Entfeuchter", also replace the prefix
+# "sensor.entfeuchter_" of the other sensors with the name you chose.
+
+title: Entfeuchterkosten
+views:
+  - title: Entfeuchter
+    path: entfeuchter
+    icon: mdi:air-humidifier
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Jetzt
+            icon: mdi:flash
+          - type: gauge
+            entity: sensor.entfeuchter_kostenpflichtige_leistung
+            name: Kostenpflichtige Leistung
+            unit: W
+            min: 0
+            max: 600
+            needle: true
+            severity:
+              green: 0
+              yellow: 50
+              red: 250
+            grid_options:
+              columns: full
+          - type: tile
+            entity: sensor.entfeuchter_leistung
+            name: Entfeuchter
+            icon: mdi:air-humidifier
+          - type: tile
+            entity: sensor.balkonkraftwerk_leistung
+            name: Balkonkraftwerk
+            icon: mdi:solar-power-variant
+          - type: history-graph
+            title: Leistung in den letzten 24 Stunden
+            hours_to_show: 24
+            entities:
+              - entity: sensor.entfeuchter_leistung
+                name: Entfeuchter
+              - entity: sensor.balkonkraftwerk_leistung
+                name: Balkonkraftwerk
+              - entity: sensor.entfeuchter_kostenpflichtige_leistung
+                name: Kostenpflichtig
+            grid_options:
+              columns: full
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Kosten
+            icon: mdi:cash
+          - type: tile
+            entity: sensor.entfeuchter_kosten_heute
+            name: Heute
+            icon: mdi:calendar-today
+          - type: tile
+            entity: sensor.entfeuchter_kosten_diesen_monat
+            name: Diesen Monat
+            icon: mdi:calendar-month
+          - type: tile
+            entity: sensor.entfeuchter_kosten_dieses_jahr
+            name: Dieses Jahr
+            icon: mdi:calendar
+          - type: tile
+            entity: sensor.entfeuchter_kosten_gesamt
+            name: Gesamt
+            icon: mdi:sigma
+          - type: tile
+            entity: sensor.entfeuchter_energie_gesamt
+            name: Energie gesamt
+            icon: mdi:lightning-bolt
+            grid_options:
+              columns: full
+          - type: history-graph
+            title: Kosten heute im Verlauf
+            hours_to_show: 24
+            entities:
+              - entity: sensor.entfeuchter_kosten_heute
+                name: Kosten heute
+            grid_options:
+              columns: full
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Statistik
+            icon: mdi:chart-bar
+          - type: statistics-graph
+            title: Kosten pro Tag
+            entities:
+              - entity: sensor.entfeuchter_kosten_gesamt
+                name: Kosten
+            stat_types:
+              - change
+            period: day
+            days_to_show: 30
+            chart_type: bar
+            grid_options:
+              columns: full
+          - type: statistics-graph
+            title: Kosten pro Monat
+            entities:
+              - entity: sensor.entfeuchter_kosten_gesamt
+                name: Kosten
+            stat_types:
+              - change
+            period: month
+            days_to_show: 365
+            chart_type: bar
+            grid_options:
+              columns: full
+          - type: statistics-graph
+            title: Energie pro Tag
+            entities:
+              - entity: sensor.entfeuchter_energie_gesamt
+                name: Energie
+            stat_types:
+              - change
+            period: day
+            days_to_show: 30
+            chart_type: bar
+            grid_options:
+              columns: full
