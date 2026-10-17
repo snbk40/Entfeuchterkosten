@@ -9,16 +9,17 @@ from decimal import Decimal
 from typing import Any
 
 from homeassistant.components.sensor import (
+    ATTR_LAST_RESET,
     RestoreSensor,
     SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.const import ATTR_LAST_RESET, UnitOfEnergy, UnitOfPower
+from homeassistant.const import UnitOfEnergy, UnitOfPower
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN, MODEL
@@ -89,7 +90,7 @@ SENSORS: tuple[EntfeuchterkostenSensorDescription, ...] = (
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: EntfeuchterkostenConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Create the sensors of a config entry."""
     async_add_entities(
