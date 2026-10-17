@@ -123,9 +123,9 @@ ready-made dashboard with everything Entfeuchterkosten shows:
 It uses only cards built into Home Assistant. Its entity IDs are the ones the sensors get when the helper is named
 "Entfeuchter", for example `sensor.entfeuchter_cost_today`.
 
-1. Open the file and replace `sensor.dehumidifier_power` with the power
-   sensor of your dehumidifier, and `sensor.solar_power` with your
-   solar power sensor. Without a solar power sensor, delete the cards that use
+1. The file uses `sensor.entfeuchter_plug_power` as the power sensor of the
+   dehumidifier and `sensor.inverter_plug_power` as the solar power sensor. If
+   yours are named differently, replace them. Without a solar power sensor, delete the cards that use
    it.
 2. If you did not name the helper "Entfeuchter", replace the prefix
    `sensor.entfeuchter_` of the other sensors with the name you chose, in

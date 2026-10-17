@@ -5,8 +5,8 @@
 # configuration editor. See "Dashboard" in the README.
 #
 # Before pasting, replace these entity IDs with your own:
-#   sensor.dehumidifier_power  the power sensor of the dehumidifier
-#   sensor.solar_power         the solar power sensor
+#   sensor.entfeuchter_plug_power  the power sensor of the dehumidifier
+#   sensor.inverter_plug_power     the solar power sensor
 # If you did not name the helper "Entfeuchter", also replace the prefix
 # "sensor.entfeuchter_" of the other sensors with the name you chose.
 
@@ -43,20 +43,20 @@ views:
             grid_options:
               columns: full
           - type: tile
-            entity: sensor.dehumidifier_power
+            entity: sensor.entfeuchter_plug_power
             name: Dehumidifier
             icon: mdi:air-humidifier
           - type: tile
-            entity: sensor.solar_power
+            entity: sensor.inverter_plug_power
             name: Solar
             icon: mdi:solar-power-variant
           - type: history-graph
             title: Dehumidifier vs. solar (24 h)
             hours_to_show: 24
             entities:
-              - entity: sensor.dehumidifier_power
+              - entity: sensor.entfeuchter_plug_power
                 name: Dehumidifier
-              - entity: sensor.solar_power
+              - entity: sensor.inverter_plug_power
                 name: Solar
               - entity: sensor.entfeuchter_chargeable_power
                 name: Chargeable
