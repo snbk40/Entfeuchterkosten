@@ -96,7 +96,12 @@ async def async_setup_entry(
     async_add_entities(
         [
             *(EntfeuchterkostenSensor(entry, description) for description in SENSORS),
-            ChargeablePowerSensor(entry),
+            # The part of the dehumidifier's power that has to be paid for
+            LivePowerSensor(
+                entry, "chargeable_power", lambda meter: meter.chargeable_watts
+            ),
+            # The part that solar power covers, for free
+            LivePowerSensor(entry, "solar_savings", lambda meter: meter.saved_watts),
         ]
     )
 
@@ -111,21 +116,27 @@ def _device_info(entry: EntfeuchterkostenConfigEntry) -> DeviceInfo:
     )
 
 
-class ChargeablePowerSensor(SensorEntity):
-    """The power of the dehumidifier that is not covered by solar power."""
+class LivePowerSensor(SensorEntity):
+    """A power in W, calculated from the current readings of both sensors."""
 
     _attr_has_entity_name = True
     _attr_should_poll = False
-    _attr_translation_key = "chargeable_power"
     _attr_device_class = SensorDeviceClass.POWER
     _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_native_unit_of_measurement = UnitOfPower.WATT
     _attr_suggested_display_precision = 0
 
-    def __init__(self, entry: EntfeuchterkostenConfigEntry) -> None:
+    def __init__(
+        self,
+        entry: EntfeuchterkostenConfigEntry,
+        key: str,
+        value_fn: Callable[[CostMeter], float | None],
+    ) -> None:
         """Initialise the sensor."""
         self._tracker: PowerTracker = entry.runtime_data
-        self._attr_unique_id = f"{entry.entry_id}_chargeable_power"
+        self._value_fn = value_fn
+        self._attr_translation_key = key
+        self._attr_unique_id = f"{entry.entry_id}_{key}"
         self._attr_device_info = _device_info(entry)
 
     async def async_added_to_hass(self) -> None:
@@ -137,8 +148,8 @@ class ChargeablePowerSensor(SensorEntity):
 
     @property
     def native_value(self) -> float | None:
-        """Return the chargeable power, or None while the power is unknown."""
-        watts = self._tracker.meter.chargeable_watts
+        """Return the power, or None while the dehumidifier's power is unknown."""
+        watts = self._value_fn(self._tracker.meter)
         return None if watts is None else round(watts, 1)
 
 

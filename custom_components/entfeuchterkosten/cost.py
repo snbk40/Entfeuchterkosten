@@ -108,6 +108,13 @@ class CostMeter:
             return None
         return max(self._watts - self._solar_watts, 0.0)
 
+    @property
+    def saved_watts(self) -> float | None:
+        """Return the part of the power that solar power covers, for free."""
+        if self._watts is None:
+            return None
+        return min(self._watts, self._solar_watts)
+
     def set_power(self, watts: float | None, now: datetime) -> None:
         """Count up to now, then go on with a new power reading.
 

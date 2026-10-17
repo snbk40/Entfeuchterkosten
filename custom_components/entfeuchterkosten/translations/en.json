@@ -64,6 +64,9 @@
       },
       "chargeable_power": {
         "name": "Chargeable power"
+      },
+      "solar_savings": {
+        "name": "Solar savings"
       }
     }
   }

@@ -22,6 +22,7 @@ For each dehumidifier you set up:
 | Total cost | your currency | never |
 | Total energy | kWh | never |
 | Chargeable power | W | – (current value) |
+| Solar savings | W | – (current value) |
 
 The currency is the one set under **Settings > System > General**.
 
@@ -86,6 +87,9 @@ the dehumidifier's power:
 
 - **Chargeable power** = power of the dehumidifier − solar power, but never
   below zero. It updates with every change of either sensor.
+- **Solar savings** = the part of the dehumidifier's power that solar power
+  covers: the smaller of the two. Chargeable power and solar savings always add
+  up to the dehumidifier's power.
 - The costs count only the chargeable power. While the solar panels generate
   more than the dehumidifier uses, it costs nothing.
 - **Total energy** still counts everything the dehumidifier uses, solar or not.
@@ -95,7 +99,7 @@ the dehumidifier's power:
 - All the solar power is assumed to be available to the dehumidifier. If other
   devices in the house use it at the same time, the real costs are higher.
 - Without a solar power sensor, the chargeable power is the dehumidifier's
-  power.
+  power and the solar savings are 0 W.
 - All values are kept when Home Assistant restarts or the integration is
   reloaded. A daily, monthly or yearly cost whose period ended while Home
   Assistant was not running starts again at zero.
@@ -108,8 +112,9 @@ To show the costs in the Energy dashboard, add the dehumidifier under
 [`dashboards/entfeuchterkosten.yaml`](dashboards/entfeuchterkosten.yaml) is a
 ready-made dashboard with everything Entfeuchterkosten shows:
 
-- **Now:** a gauge of the chargeable power, the power of the dehumidifier
-  and of the solar panels, and the three powers over the last 24 hours
+- **Now:** a gauge of the chargeable power, the solar savings, the power of
+  the dehumidifier and of the solar panels, and all four over the last 24
+  hours
 - **Costs:** the costs of today, this month, this year and in total, the
   total energy, and today's costs over the day
 - **Statistics:** bar charts of the costs per day and per month, and of the
@@ -146,7 +151,7 @@ they are drawn from only from the moment the sensors exist.
 | `custom_components/entfeuchterkosten/tracker.py` | Follows the power sensors and feeds the cost meter |
 | `custom_components/entfeuchterkosten/__init__.py` | Sets the integration up and tears it down |
 | `custom_components/entfeuchterkosten/config_flow.py` | The setup dialog and the options dialog |
-| `custom_components/entfeuchterkosten/sensor.py` | The cost, energy and chargeable power sensors |
+| `custom_components/entfeuchterkosten/sensor.py` | The cost, energy, chargeable power and solar savings sensors |
 | `custom_components/entfeuchterkosten/translations/` | UI texts (English) |
 | `dashboards/entfeuchterkosten.yaml` | A ready-made dashboard |
 | `hacs.json` | Name and minimum Home Assistant version for HACS |

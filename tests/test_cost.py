@@ -131,6 +131,7 @@ class CostMeter(unittest.TestCase):
         meter.set_power(400, at(2026, 10, 17, 10))
         meter.set_solar_power(300, at(2026, 10, 17, 10))
         self.assertEqual(meter.chargeable_watts, 100)
+        self.assertEqual(meter.saved_watts, 300)
         meter.advance(at(2026, 10, 17, 12))
         self.assertAlmostEqual(meter.total_kwh, 0.8)  # all the energy used
         self.assertAlmostEqual(meter.total_cost, 0.2)  # only the chargeable part
@@ -141,6 +142,7 @@ class CostMeter(unittest.TestCase):
         meter.set_solar_power(600, at(2026, 10, 17, 10))
         meter.set_power(400, at(2026, 10, 17, 10))
         self.assertEqual(meter.chargeable_watts, 0)
+        self.assertEqual(meter.saved_watts, 400)  # no more than is used
         meter.advance(at(2026, 10, 17, 12))
         self.assertAlmostEqual(meter.total_kwh, 0.8)
         self.assertEqual(meter.total_cost, 0)
@@ -158,8 +160,17 @@ class CostMeter(unittest.TestCase):
         meter = cost.CostMeter(price=1.0, now=at(2026, 10, 17, 10))
         meter.set_solar_power(300, at(2026, 10, 17, 10))
         self.assertIsNone(meter.chargeable_watts)
+        self.assertIsNone(meter.saved_watts)
         meter.set_power(None, at(2026, 10, 17, 10))
         self.assertIsNone(meter.chargeable_watts)
+        self.assertIsNone(meter.saved_watts)
+
+    def test_no_savings_without_solar(self):
+        meter = cost.CostMeter(price=1.0, now=at(2026, 10, 17, 10))
+        meter.set_power(400, at(2026, 10, 17, 10))
+        self.assertEqual(meter.saved_watts, 0)
+        meter.set_solar_power(None, at(2026, 10, 17, 10))  # inverter offline
+        self.assertEqual(meter.saved_watts, 0)
 
     def test_restore_period_only_while_it_runs(self):
         meter = cost.CostMeter(price=1.0, now=at(2026, 10, 17, 10))

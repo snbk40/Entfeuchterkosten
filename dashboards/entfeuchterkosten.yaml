@@ -37,6 +37,12 @@ views:
             grid_options:
               columns: full
           - type: tile
+            entity: sensor.entfeuchter_solar_savings
+            name: Solar savings
+            icon: mdi:piggy-bank
+            grid_options:
+              columns: full
+          - type: tile
             entity: sensor.dehumidifier_power
             name: Dehumidifier
             icon: mdi:air-humidifier
@@ -54,6 +60,8 @@ views:
                 name: Solar
               - entity: sensor.entfeuchter_chargeable_power
                 name: Chargeable
+              - entity: sensor.entfeuchter_solar_savings
+                name: Solar savings
             grid_options:
               columns: full
 
