@@ -6,7 +6,7 @@
         "description": "Berechnet die Stromkosten eines Luftentfeuchters aus seinem Leistungssensor, zum Beispiel dem einer smarten Steckdose. Gleichzeitig von Solarmodulen erzeugter Strom ist kostenlos und wird damit verrechnet.",
         "data": {
           "name": "Name",
-          "power_entity": "Leistungssensor",
+          "power_entity": "Entfeuchter-Leistungssensor",
           "solar_entity": "Solar-Leistungssensor (optional)",
           "price": "Strompreis"
         },
@@ -19,10 +19,10 @@
       }
     },
     "error": {
-      "same_entity": "Der Solar-Leistungssensor muss ein anderer Sensor sein als der Leistungssensor des Entfeuchters."
+      "same_entity": "Der Solar-Leistungssensor muss ein anderer Sensor sein als der Entfeuchter-Leistungssensor."
     },
     "abort": {
-      "already_configured": "Dieser Leistungssensor wird schon von einem anderen Entfeuchterkosten-Eintrag verwendet."
+      "already_configured": "Dieser Entfeuchter-Leistungssensor wird schon von einem anderen Entfeuchterkosten-Eintrag verwendet."
     }
   },
   "options": {
@@ -30,7 +30,7 @@
       "init": {
         "title": "Optionen",
         "data": {
-          "power_entity": "Leistungssensor",
+          "power_entity": "Entfeuchter-Leistungssensor",
           "solar_entity": "Solar-Leistungssensor (optional)",
           "price": "Strompreis"
         },
@@ -42,7 +42,7 @@
       }
     },
     "error": {
-      "same_entity": "Der Solar-Leistungssensor muss ein anderer Sensor sein als der Leistungssensor des Entfeuchters."
+      "same_entity": "Der Solar-Leistungssensor muss ein anderer Sensor sein als der Entfeuchter-Leistungssensor."
     }
   },
   "entity": {
